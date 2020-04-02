@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700"> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
     <link rel="stylesheet" href="fonts/icomoon/style.css">
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -20,10 +20,10 @@
     <link rel="stylesheet" href="css/aos.css">
 
     <link rel="stylesheet" href="css/style.css">
-    
+
   </head>
   <body>
-  
+
   <div class="site-wrap">
     <header class="site-navbar" role="banner">
       <div class="site-navbar-top">
@@ -38,7 +38,7 @@
             </div>
 
             <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
-            
+
               <div class="site-logo">
               <img src="note.png"  width="200px">
               </div>
@@ -53,15 +53,15 @@
                       <span class="icon icon-shopping_cart"></span>
                       <span class="count">2</span>
                     </a>
-                  </li> 
+                  </li>
                   <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span class="icon-menu"></span></a></li>
                 </ul>
-              </div> 
+              </div>
             </div>
 
           </div>
         </div>
-      </div> 
+      </div>
       <nav class="site-navigation text-right text-md-center" role="navigation">
         <div class="container">
           <ul class="site-menu js-clone-nav d-none d-md-block">
@@ -71,15 +71,16 @@
               <ul class="dropdown">
                 @foreach($types as $type)
                 <li class="has-children">
-                    
-                        <a href="#">{{ $type->name }}</a>
-                        
-                  <ul class="dropdown">
-                        @foreach($type->products as $product)
-                        <li><a href="#">{{ $product->name }}</a></li>
-                        @endforeach
-                  </ul>
-                  
+                    <a href="/collections/{{ $type->id }}">{{ $type->name }}</a>
+                    <ul class="dropdown">
+                        @if (!$type->sub_types->isEmpty())
+                            @foreach($type->sub_types as $sub_type)
+                                <li>
+                                    <a href="/collections/{{ $type->id }}/{{ $sub_type->id }}">{{ $sub_type->name }}</a>
+                                </li>
+                            @endforeach
+                        @endif
+                    </ul>
                 </li>
                 @endforeach
               </ul>
@@ -99,7 +100,7 @@
             <div class="intro-text text-center text-md-left">
               <p class="mb-4" style="color:white;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus at iaculis quam. Integer accumsan tincidunt fringilla. </p>
               <p>
-                <a href="#" class="btn btn-sm btn-primary" >Shop Now</a> 
+                <a href="#" class="btn btn-sm btn-primary" >Shop Now</a>
               </p>
             </div> --}}
           </div>
@@ -158,7 +159,7 @@
           </div>
           @endforeach
 
-          
+
         </div>
       </div>
     </div>
@@ -182,7 +183,14 @@
                   <div class="block-4-text p-4">
                     <h3><a href="#">{{ $product->name }}</a></h3>
                     <p class="mb-0">{{ $product->type_id }}</p>
-                    <p class="text-primary font-weight-bold">{{ $product->rprice }}</p> 
+                    <p class="text-primary font-weight-bold">{{ $product->rprice }}</p>
+                    <hr>
+                    @auth
+                    <a href="/add-to-cart/{{ $product->id }}" class="btn btn-outline-primary">Add to Card</a>
+                    @endauth
+                    @guest
+                    <a href="/home" class="btn btn-outline-primary">Login to Add to Card</a>
+                    @endguest
                   </div>
                 </div>
               </div>
@@ -278,10 +286,10 @@
           <div class="col-md-12">
             <p>
 
-            Copyright &copy;<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>document.write(new Date().getFullYear());</script> All rights reserved 
+            Copyright &copy;<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>document.write(new Date().getFullYear());</script> All rights reserved
             </p>
           </div>
-          
+
         </div>
       </div>
     </footer>
@@ -296,6 +304,6 @@
   <script src="js/aos.js"></script>
 
   <script src="js/main.js"></script>
-    
+
   </body>
 </html>

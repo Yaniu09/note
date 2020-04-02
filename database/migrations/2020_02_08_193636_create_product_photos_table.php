@@ -16,8 +16,8 @@ class CreateProductPhotosTable extends Migration
         Schema::create('product_photos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('product_id');
-            $table->string('color');
-            $table->string('main');
+            $table->string('color')->nullable();
+            $table->integer('main')->default('0');
             $table->string('url_original');
             $table->string('url_thumbnail')->nullable();
             $table->timestamps();

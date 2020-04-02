@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Type;
+use App\SubType;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 
-class TypeController extends Controller
+class SubTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,9 @@ class TypeController extends Controller
      */
     public function index()
     {
+        $subTypes = SubType::all();
         $types = Type::all();
-        return view('admin.admin.type',compact('types'));
+        return view('admin.admin.subType',compact('types', 'subTypes'));
     }
 
     /**
@@ -26,7 +27,7 @@ class TypeController extends Controller
      */
     public function create()
     {
-
+        //
     }
 
     /**
@@ -43,22 +44,23 @@ class TypeController extends Controller
 
 
 
-        Type::create([
+        SubType::create([
+            'type_id' => request('type_id'),
             'name' => request('name'),
             'description' => request('description'),
             //'user_id' => auth()->id(),
         ]);
 
-        return redirect('admin/type')->with('alert-success', 'Successfully added a new Product Catergory');
+        return redirect('admin/sub-type')->with('alert-success', 'Successfully added a new Product Catergory');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Type  $type
+     * @param  \App\SubType  $subType
      * @return \Illuminate\Http\Response
      */
-    public function show(Type $type)
+    public function show(SubType $subType)
     {
         //
     }
@@ -66,10 +68,10 @@ class TypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Type  $type
+     * @param  \App\SubType  $subType
      * @return \Illuminate\Http\Response
      */
-    public function edit(Type $type)
+    public function edit(SubType $subType)
     {
         //
     }
@@ -78,10 +80,10 @@ class TypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Type  $type
+     * @param  \App\SubType  $subType
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Type $type)
+    public function update(Request $request, SubType $subType)
     {
         //
     }
@@ -89,11 +91,11 @@ class TypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Type  $type
+     * @param  \App\SubType  $subType
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Type $type)
+    public function destroy(SubType $subType)
     {
-
+        //
     }
 }

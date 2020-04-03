@@ -29,10 +29,10 @@
                             @foreach($items as $item)
                             <tr>
                                 <td class="product-thumbnail">
-                                    <img src="/storage/{{ $item->product->images[0]->url_thumbnail }}" alt="Image" class="img-fluid">
+                                    <img src="/storage/{{ $item->associatedModel->images[0]->url_thumbnail }}" alt="Image" class="img-fluid">
                                 </td>
                                 <td class="product-name">
-                                    <h2 class="h5 text-black">{{ $item->product->name }}</h2>
+                                    <h2 class="h5 text-black">{{ $item->name }}</h2>
                                 </td>
                                 <td>{{ $item->price }}</td>
                                 <td>

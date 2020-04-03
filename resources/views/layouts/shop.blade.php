@@ -85,7 +85,7 @@
                                 @endforeach
                             </ul>
                         </li>
-                        <li><a href="shop.html">Contact Us</a></li>
+                        <li><a href="/contact-us">Contact Us</a></li>
                         <li><a href="#">Our Shops</a></li>
                     </ul>
                 </div>

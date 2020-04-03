@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use App\Products;
 use App\Type;
 use App\SubType;
+use App\Order;
+use App\OrderProduct;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,12 +104,45 @@ Route::get('checkout', function() {
     return view('checkout', compact('types', 'items', 'sub_total', 'total'));
 });
 
-Route::post('checkout', function() {
+Route::post('checkout', function(Request $request) {
     $types = Type::all();
     $items = \Cart::session(session()->getId())->getContent();
 
     $sub_total = \Cart::session(session()->getId())->getSubTotal();
     $total = \Cart::session(session()->getId())->getTotal();
+
+    $order = new Order;
+    $order->user_id = (auth()->user() !== null ? auth()->user()->id : '0');
+    $order->first_name = $request->first_name;
+    $order->last_name = $request->last_name;
+    $order->company_name = $request->company_name;
+    $order->address1 = $request->address1;
+    $order->address2 = $request->address2;
+    $order->island = $request->island;
+    $order->zip = $request->zip;
+    $order->email = $request->email;
+    $order->phone = $request->phone;
+    $order->ordernotes = $request->ordernotes;
+
+    $order->payment_status = '1';
+    $order->payment_method = 'BML';
+
+    $order->tax = '0';
+    $order->discount = '0';
+    $order->subtotal = $sub_total;
+    $order->total = $total;
+
+    $order->save();
+
+    foreach ($items as $item) {
+        $orderProduct = new OrderProduct;
+        $orderProduct->order_id = $order->id;
+        $orderProduct->product_id = $item->associatedModel->id;
+        $orderProduct->price = $item->price;
+        $orderProduct->qty = $item->quantity;
+        $orderProduct->total = $item->price * $item->quantity;
+        $orderProduct->save();
+    }
 
     return view('thankYou', compact('types'));
 });

@@ -54,7 +54,8 @@ Route::get('collections/{type}/{subType}/{product}', function (Type $type, SubTy
 });
 
 Route::post('/add-to-cart', function(Request $request) {
-    $product = Products::find($request->product_id);
+    $product = Products::where('id', $request->product_id)->with(['images'])->first();
+    // return $product;
 
     \Cart::session(session()->getId())->add(array(
         'id' => $product->id . '0001',
@@ -62,7 +63,8 @@ Route::post('/add-to-cart', function(Request $request) {
         'price' => $product->retail_price,
         'quantity' => $request->qty,
         'attributes' => array(),
-        'associatedModel' => $product
+        'associatedModel' => $product,
+        'associatedModelWith' => ['images']
     ));
 
     return response()->json([
@@ -70,7 +72,14 @@ Route::post('/add-to-cart', function(Request $request) {
     ]);;
 });
 
-Route::get('cart-itmes', function() {
-    $items = \Cart::getContent();
+Route::get('cart', function() {
+    $types = Type::all();
+    $items = \Cart::session(session()->getId())->getContent();
+
+    return view('cart', compact('types', 'items'));
+});
+
+Route::get('cart-items', function() {
+    $items = \Cart::session(session()->getId())->getContent();
     return $items;
 });

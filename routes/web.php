@@ -30,6 +30,10 @@ Route::get('/admin', function () {
     return view('admin.admin.home');
 });
 
+Route::get('/contact-us', function () {
+    return view('contact');
+});
+
 
 Route::get('/admin/type', 'TypeController@index');
 Route::post('/admin/type', 'TypeController@store');

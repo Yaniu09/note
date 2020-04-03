@@ -40,14 +40,14 @@
                                         <div class="input-group-prepend">
                                             <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
                                         </div>
-                                        <input type="text" class="form-control text-center" value="{{ $item->qty }}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                                        <input type="text" class="form-control text-center" value="{{ $item->quantity }}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
                                         </div>
                                     </div>
 
                                 </td>
-                                <td>{{ $item->price * $item->qty }}</td>
+                                <td>{{ $item->price * $item->quantity }}</td>
                                 <td><a href="#" class="btn btn-primary btn-sm">X</a></td>
                             </tr>
                             @endforeach

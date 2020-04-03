@@ -37,7 +37,7 @@ Route::get('/contact-us', function () {
     return view('contact', compact('types'));
 });
 
-Route::post('/contact-us', 'Contact@store');
+Route::post('/contact-us', 'ContactController@store');
 
 Route::get('/admin/type', 'TypeController@index');
 Route::post('/admin/type', 'TypeController@store');

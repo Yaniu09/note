@@ -14,13 +14,24 @@
       <div class="site-section">
         <div class="container">
           <div class="row">
+          <div class="flash-message">
+                @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+                    @if(Session::has('alert-' . $msg))
+
+                    <p class="alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }} <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
+                    
+                    @endif
+                @endforeach
+            </div>
             <div class="col-md-12">
               <h2 class="h3 mb-3 text-black">Get In Touch</h2>
             </div>
             <div class="col-md-7">
+
+            
   
-              <form action="#" method="post">
-                
+              <form action="/contact-us" method="post">
+                @csrf
                 <div class="p-3 p-lg-5 border">
                   <div class="form-group row">
                     <div class="col-md-6">
@@ -61,18 +72,9 @@
             </div>
             <div class="col-md-5 ml-auto">
               <div class="p-4 border mb-3">
-                <span class="d-block text-primary h6 text-uppercase">New York</span>
-                <p class="mb-0">203 Fake St. Mountain View, San Francisco, California, USA</p>
+                <span class="d-block text-primary h6 text-uppercase">Male' Maldives</span>
+                <p class="mb-0">G.Pool dream, 20151,Male' Maldives</p>
               </div>
-              <div class="p-4 border mb-3">
-                <span class="d-block text-primary h6 text-uppercase">London</span>
-                <p class="mb-0">203 Fake St. Mountain View, San Francisco, California, USA</p>
-              </div>
-              <div class="p-4 border mb-3">
-                <span class="d-block text-primary h6 text-uppercase">Canada</span>
-                <p class="mb-0">203 Fake St. Mountain View, San Francisco, California, USA</p>
-              </div>
-  
             </div>
           </div>
         </div>

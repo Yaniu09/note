@@ -16,22 +16,22 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('user_id')->nullable();
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
             $table->string('company_name')->nullable();
-            $table->string('address1');
-            $table->string('address2');
-            $table->string('island');
-            $table->string('zip');
-            $table->string('email');
-            $table->string('phone');
-            $table->longtext('ordernotes');
+            $table->string('address1')->nullable();
+            $table->string('address2')->nullable();
+            $table->string('island')->nullable();
+            $table->string('zip')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->longtext('ordernotes')->nullable();
             $table->integer('payment_status')->default('0');
             $table->string('payment_method')->nullable();
-            $table->integer('tax');
-            $table->integer('discount');
-            $table->integer('subtotal');
-            $table->integer('total');
+            $table->integer('tax')->nullable();
+            $table->integer('discount')->nullable();
+            $table->integer('subtotal')->nullable();
+            $table->integer('total')->nullable();
             $table->timestamps();
         });
     }

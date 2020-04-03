@@ -32,7 +32,7 @@ Route::get('/admin', function () {
 
 Route::get('/contact-us', function () {
     $types = Type::all();
-    return view('contact' compact('types'));
+    return view('contact', compact('types'));
 });
 
 

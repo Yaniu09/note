@@ -29,7 +29,7 @@
                             @foreach($items as $item)
                             <tr>
                                 <td class="product-thumbnail">
-                                    <img src="/storage/{{ $item->product->image[0]->url_thumbnail }}" alt="Image" class="img-fluid">
+                                    <img src="/storage/{{ $item->product->images[0]->url_thumbnail }}" alt="Image" class="img-fluid">
                                 </td>
                                 <td class="product-name">
                                     <h2 class="h5 text-black">{{ $item->product->name }}</h2>
@@ -93,7 +93,7 @@
                                 <span class="text-black">Subtotal</span>
                             </div>
                             <div class="col-md-6 text-right">
-                                <strong class="text-black">$230.00</strong>
+                                <strong class="text-black">MVR {{ $sub_total }}</strong>
                             </div>
                         </div>
                         <div class="row mb-5">
@@ -101,7 +101,7 @@
                                 <span class="text-black">Total</span>
                             </div>
                             <div class="col-md-6 text-right">
-                                <strong class="text-black">$230.00</strong>
+                                <strong class="text-black">MVR {{ $total }}</strong>
                             </div>
                         </div>
 

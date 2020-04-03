@@ -76,7 +76,10 @@ Route::get('cart', function() {
     $types = Type::all();
     $items = \Cart::session(session()->getId())->getContent();
 
-    return view('cart', compact('types', 'items'));
+    $sub_total = \Cart::session(session()->getId())->getSubTotal();
+    $total = \Cart::session(session()->getId())->getTotal();
+
+    return view('cart', compact('types', 'items', 'sub_total', 'total'));
 });
 
 Route::get('cart-items', function() {

@@ -51,6 +51,7 @@ class ProductsController extends Controller
 
         $product = Products::create([
             'name' => request('name'),
+            'description' => request('description'),
             'retail_price' => request('rprice'),
             'wholesale_price' => request('wprice'),
             'sub_type_id' => request('sub_type_id'),

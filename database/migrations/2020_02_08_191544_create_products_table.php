@@ -18,6 +18,7 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->string('sub_type_id');
             $table->string('retail_price');
+            $table->longText('description')->nullable();
             $table->string('wholesale_price')->nullable();
             $table->integer('featured_product')->default('0');
             $table->integer('toppicks')->default('0');

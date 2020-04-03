@@ -1,7 +1,9 @@
 <?php
 
-use App\Type;
+use Illuminate\Http\Request;
 use App\Products;
+use App\Type;
+use App\SubType;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,20 +48,29 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/add-to-cart/{productId}', function($productId) {
-    $Product = Products::find($productId);
-    $userID = auth()->user()->id;
-    $rowId = $userID . $productId;
+Route::get('collections/{type}/{subType}/{product}', function (Type $type, SubType $subType, Products $product) {
+    $types = Type::all();
+    return view('product.single', compact('types', 'product'));
+});
 
+Route::post('/add-to-cart', function(Request $request) {
+    $product = Products::find($request->product_id);
 
-    \Cart::session($userID)->add(array(
-        'id' => $rowId,
-        'name' => $Product->name,
-        'price' => $Product->reatil_price,
-        'quantity' => 1,
+    \Cart::session(session()->getId())->add(array(
+        'id' => $product->id . '0001',
+        'name' => $product->name,
+        'price' => $product->retail_price,
+        'quantity' => $request->qty,
         'attributes' => array(),
-        'associatedModel' => $Product
+        'associatedModel' => $product
     ));
 
-    return redirect()->back();
+    return response()->json([
+        'message' => 'Item added to cart successfully'
+    ]);;
+});
+
+Route::get('cart-itmes', function() {
+    $items = \Cart::getContent();
+    return $items;
 });

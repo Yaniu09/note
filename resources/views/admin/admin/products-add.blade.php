@@ -36,6 +36,11 @@
         </div>
 
         <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
             <label for="rprice">Retail price *</label>
             <input type="text" class="form-control" id="rprice" name="rprice" placeholder="MVR " required>
         </div>
@@ -107,6 +112,7 @@
                 <button type="button" class="btn btn-warning m-1">Edit</button>
                 <a href="{{ url()->current() }}/{{ $product->id }}/images" class="btn btn-info m-1">Images</a>
                 <button type="submit"  class="btn btn-danger m-1">Delete</button>
+                <a href="/collections/{{ $product->subType->type->id }}/{{ $product->subType->id }}/{{ $product->id }}" class="btn btn-primary m-1">View</a>
             </td>
             </tr>
             @endforeach

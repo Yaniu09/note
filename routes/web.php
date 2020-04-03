@@ -109,5 +109,5 @@ Route::post('checkout', function() {
     $sub_total = \Cart::session(session()->getId())->getSubTotal();
     $total = \Cart::session(session()->getId())->getTotal();
 
-    return view('thankYou');
+    return view('thankYou', compact('types'));
 });

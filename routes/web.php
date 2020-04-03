@@ -86,3 +86,23 @@ Route::get('cart-items', function() {
     $items = \Cart::session(session()->getId())->getContent();
     return $items;
 });
+
+Route::get('checkout', function() {
+    $types = Type::all();
+    $items = \Cart::session(session()->getId())->getContent();
+
+    $sub_total = \Cart::session(session()->getId())->getSubTotal();
+    $total = \Cart::session(session()->getId())->getTotal();
+
+    return view('checkout', compact('types', 'items', 'sub_total', 'total'));
+});
+
+Route::post('checkout', function() {
+    $types = Type::all();
+    $items = \Cart::session(session()->getId())->getContent();
+
+    $sub_total = \Cart::session(session()->getId())->getSubTotal();
+    $total = \Cart::session(session()->getId())->getTotal();
+
+    return view('thankYou');
+});

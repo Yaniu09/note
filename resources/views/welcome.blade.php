@@ -95,12 +95,8 @@
                     <p class="mb-0">{{ $product->type_id }}</p>
                     <p class="text-primary font-weight-bold">{{ $product->rprice }}</p>
                     <hr>
-                    @auth
-                    <a href="/add-to-cart/{{ $product->id }}" class="btn btn-outline-primary">Add to Card</a>
-                    @endauth
-                    @guest
-                    <a href="/home" class="btn btn-outline-primary">Login to Add to Card</a>
-                    @endguest
+                    <a href="/collections/{{ $product->subType->type->id }}/{{ $product->subType->id }}/{{ $product->id }}" class="btn btn-outline-primary">View</a>
+                    
                   </div>
                 </div>
               </div>

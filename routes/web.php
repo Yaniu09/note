@@ -31,7 +31,8 @@ Route::get('/admin', function () {
 });
 
 Route::get('/contact-us', function () {
-    return view('contact');
+    $types = Type::all();
+    return view('contact' compact('types'));
 });
 
 

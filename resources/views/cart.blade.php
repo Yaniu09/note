@@ -27,7 +27,6 @@
         <div class="row mb-5">
             <form class="col-md-12" method="post">
                 <div class="site-blocks-table">
-                    <h3>No items in cart</h3>
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -41,9 +40,18 @@
                         </thead>
                         <tbody>
                             @foreach($items as $item)
-                            <tr>
+                            {{-- {{ $item }} --}}
+                            <tr style="background-color: #{{ $item->attributes->color }}">
                                 <td class="product-thumbnail">
+                                    @if($item->attributes->color)
+                                    <?php
+                                        $image = $item->associatedModel->images->where('color', $item->attributes->color)->first();
+                                        // dd($imagesArray->url_thumbnail)
+                                    ?>
+                                    <img src="/storage/{{ $image->url_thumbnail }}" alt="Image" class="img-fluid">
+                                    @else
                                     <img src="/storage/{{ $item->associatedModel->images[0]->url_thumbnail }}" alt="Image" class="img-fluid">
+                                    @endif
                                 </td>
                                 <td class="product-name">
                                     <h2 class="h5 text-black">{{ $item->name }}</h2>
@@ -51,13 +59,7 @@
                                 <td>{{ $item->price }}</td>
                                 <td>
                                     <div class="input-group mb-3" style="max-width: 120px;">
-                                        <div class="input-group-prepend">
-                                            <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
-                                        </div>
-                                        <input type="text" class="form-control text-center" value="{{ $item->quantity }}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
-                                        </div>
+                                        <input type="text" class="form-control text-center" value="{{ $item->quantity }}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" disabled>
                                     </div>
 
                                 </td>
@@ -96,6 +98,16 @@
                                 <strong class="text-black">MVR {{ $sub_total }}</strong>
                             </div>
                         </div>
+                        @foreach($cartConditions as $condition)
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <span class="text-black">{{ $condition->getName() }}</span>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <strong class="text-black">MVR {{ $condition->getCalculatedValue($sub_total) }}</strong>
+                            </div>
+                        </div>
+                        @endforeach
                         <div class="row mb-5">
                             <div class="col-md-6">
                                 <span class="text-black">Total</span>

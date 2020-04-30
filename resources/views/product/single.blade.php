@@ -32,7 +32,7 @@
                         @foreach($product->images as $image)
                             @if ($image->color !== NULL)
                             <div>
-                                <input data-image="{{ $image->color}}" type="radio" name="color" value="" @if($i == 1) checked @endif>
+                                <input data-image="{{ $image->color}}" type="radio" name="color" value="{{ $image->color}}" @if($i == 1) checked @endif>
                                 <label style="" for="red"><span style="background-color: #{{ $image->color}}"></span></label>
                             </div>
                             @endif
@@ -80,7 +80,8 @@
                 type: 'POST',
                 data: {
                     'product_id': {{ $product->id }},
-                    'qty': $("#qty").val()
+                    'qty': $("#qty").val(),
+                    'color': $("input[name='color']:checked").val()
                 },
                 success: function (result) {
                     // alert("Item added to cart");

@@ -2,10 +2,13 @@
 
 use Illuminate\Http\Request;
 use App\Products;
+use App\ProductPhotos;
 use App\Type;
 use App\SubType;
 use App\Order;
 use App\OrderProduct;
+use App\Mail\OrderConfirmed;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,9 +31,6 @@ Route::get('/', function () {
     return view('welcome',compact('types', 'products', 'topPicks', 'featuredProducts'));
 });
 
-Route::get('/admin', function () {
-    return view('admin.admin.home');
-});
 
 Route::get('/contact-us', function () {
     $types = Type::all();
@@ -39,18 +39,23 @@ Route::get('/contact-us', function () {
 
 Route::post('/contact-us', 'ContactController@store');
 
-Route::get('/admin/type', 'TypeController@index');
-Route::post('/admin/type', 'TypeController@store');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin', function () {
+        return view('admin.admin.home');
+    });
+    Route::get('/admin/type', 'TypeController@index');
+    Route::post('/admin/type', 'TypeController@store');
 
-Route::get('/admin/sub-type', 'SubTypeController@index');
-Route::post('/admin/sub-type', 'SubTypeController@store');
+    Route::get('/admin/sub-type', 'SubTypeController@index');
+    Route::post('/admin/sub-type', 'SubTypeController@store');
 
-Route::get('/admin/product', 'ProductsController@index');
-Route::post('/admin/product', 'ProductsController@store');
+    Route::get('/admin/product', 'ProductsController@index');
+    Route::post('/admin/product', 'ProductsController@store');
 
-Route::get('/admin/product/{product}/images', 'ProductsController@showImages');
-Route::post('/admin/product/{product}/images/upload-images', 'ProductsController@storeImages');
-Route::post('/admin/product/{product}/images/update-color', 'ProductsController@updateImageColor');
+    Route::get('/admin/product/{product}/images', 'ProductsController@showImages');
+    Route::post('/admin/product/{product}/images/upload-images', 'ProductsController@storeImages');
+    Route::post('/admin/product/{product}/images/update-color', 'ProductsController@updateImageColor');
+});
 
 Auth::routes();
 
@@ -85,15 +90,31 @@ Route::post('/add-to-cart', function(Request $request) {
     $product = Products::where('id', $request->product_id)->with(['images'])->first();
     // return $product;
 
-    \Cart::session(session()->getId())->add(array(
-        'id' => $product->id . '0001',
-        'name' => $product->name,
-        'price' => $product->retail_price,
-        'quantity' => $request->qty,
-        'attributes' => array(),
-        'associatedModel' => $product,
-        'associatedModelWith' => ['images']
-    ));
+    if ($request->has('color')) {
+        $photo = ProductPhotos::where('product_id', $request->product_id)->where('color', $request->color)->first();
+
+        \Cart::session(session()->getId())->add(array(
+            'id' => $product->id . $photo->id . '0001',
+            'name' => $product->name,
+            'price' => $product->retail_price,
+            'quantity' => $request->qty,
+            'attributes' => array(
+                'color' => $request->color
+            ),
+            'associatedModel' => $product,
+            'associatedModelWith' => ['images']
+        ));
+    } else {
+        \Cart::session(session()->getId())->add(array(
+            'id' => $product->id . '0001',
+            'name' => $product->name,
+            'price' => $product->retail_price,
+            'quantity' => $request->qty,
+            'attributes' => array(),
+            'associatedModel' => $product,
+            'associatedModelWith' => ['images']
+        ));
+    }
 
     return response()->json([
         'message' => 'Item added to cart successfully'
@@ -101,13 +122,27 @@ Route::post('/add-to-cart', function(Request $request) {
 });
 
 Route::get('cart', function() {
+    $condition = new \Darryldecode\Cart\CartCondition(array(
+        'name' => 'GST 6%',
+        'type' => 'tax',
+        'target' => 'total', // this condition will be applied to cart's subtotal when getSubTotal() is called.
+        'value' => '6%',
+        'attributes' => array( // attributes field is optional
+            'description' => 'Goods and Services Tax'
+        )
+    ));
+
+    \Cart::session(session()->getId())->condition($condition);
+
     $types = Type::all();
     $items = \Cart::session(session()->getId())->getContent();
 
     $sub_total = \Cart::session(session()->getId())->getSubTotal();
     $total = \Cart::session(session()->getId())->getTotal();
 
-    return view('cart', compact('types', 'items', 'sub_total', 'total'));
+    $cartConditions = \Cart::getConditions();
+
+    return view('cart', compact('types', 'items', 'sub_total', 'total', 'cartConditions'));
 });
 
 Route::get('remove-cart-item/{id}', function($id) {
@@ -127,7 +162,9 @@ Route::get('checkout', function() {
     $sub_total = \Cart::session(session()->getId())->getSubTotal();
     $total = \Cart::session(session()->getId())->getTotal();
 
-    return view('checkout', compact('types', 'items', 'sub_total', 'total'));
+    $cartConditions = \Cart::getConditions();
+
+    return view('checkout', compact('types', 'items', 'sub_total', 'total', 'cartConditions'));
 });
 
 Route::post('checkout', function(Request $request) {
@@ -169,6 +206,8 @@ Route::post('checkout', function(Request $request) {
         $orderProduct->total = $item->price * $item->quantity;
         $orderProduct->save();
     }
+
+    Mail::to($request->email)->send(new OrderConfirmed($order));
 
     return view('thankYou', compact('types'));
 });

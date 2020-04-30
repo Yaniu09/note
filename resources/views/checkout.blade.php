@@ -110,7 +110,7 @@
                             <table class="table site-block-order-table mb-5">
                                 <thead>
                                     <th>Product</th>
-                                    <th>Total</th>
+                                    <th>MVR</th>
                                 </thead>
                                 <tbody>
                                     @foreach ($items as $item)
@@ -119,6 +119,20 @@
                                         <td>{{ $item->price * $item->quantity }}</td>
                                     </tr>
                                     @endforeach
+                                    <tr>
+                                        <td style="font-weight: bold;">Sub Total</td>
+                                        <td style="font-weight: bold;">{{ $sub_total }}</td>
+                                    </tr>
+                                    @foreach($cartConditions as $condition)
+                                    <tr>
+                                        <td style="font-weight: bold;">{{ $condition->getName() }}</td>
+                                        <td style="font-weight: bold;">{{ $condition->getCalculatedValue($sub_total) }}</td>
+                                    </tr>
+                                    @endforeach
+                                    <tr>
+                                        <td style="font-weight: bold;">TOTAL</td>
+                                        <td style="font-weight: bold;">{{ $total }}</td>
+                                    </tr>
                                 </tbody>
                             </table>
 

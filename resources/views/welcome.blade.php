@@ -85,6 +85,7 @@
           <div class="col-md-12">
             <div class="nonloop-block-3 owl-carousel">
              @foreach ($products as $product)
+             <a href="/collections/{{ $product->subType->type->id }}/{{ $product->subType->id }}/{{ $product->id }}">
               <div class="item">
                 <div class="block-4 text-center">
                   <figure class="block-4-image">
@@ -96,10 +97,11 @@
                     <p class="text-primary font-weight-bold">{{ $product->rprice }}</p>
                     <hr>
                     <a href="/collections/{{ $product->subType->type->id }}/{{ $product->subType->id }}/{{ $product->id }}" class="btn btn-outline-primary">View</a>
-                    
+
                   </div>
                 </div>
               </div>
+             </a>
              @endforeach
             </div>
           </div>

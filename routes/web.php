@@ -56,6 +56,26 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('collections/{type}', function (Type $type) {
+    $types = Type::all();
+
+    $subTypes = SubType::where('type_id', $type->id)->pluck('id')->toArray();
+    $products = Products::whereIn('sub_type_id', $subTypes)->get();
+
+    // return $products;
+
+    return view('product.all', compact('types', 'products'));
+});
+
+Route::get('collections/{type}/{subType}', function (Type $type, SubType $subType) {
+    $types = Type::all();
+
+    $products = Products::where('sub_type_id', $subType->id)->get();
+
+    // return $products;
+
+    return view('product.all', compact('types', 'products'));
+});
 Route::get('collections/{type}/{subType}/{product}', function (Type $type, SubType $subType, Products $product) {
     $types = Type::all();
     return view('product.single', compact('types', 'product'));
@@ -88,6 +108,11 @@ Route::get('cart', function() {
     $total = \Cart::session(session()->getId())->getTotal();
 
     return view('cart', compact('types', 'items', 'sub_total', 'total'));
+});
+
+Route::get('remove-cart-item/{id}', function($id) {
+    \Cart::session(session()->getId())->remove($id);
+    return redirect()->back();
 });
 
 Route::get('cart-items', function() {

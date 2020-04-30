@@ -5,7 +5,7 @@
 <div class="bg-light py-3">
     <div class="container">
         <div class="row">
-            <div class="col-md-12 mb-0"><a href="index.html">Home</a> <span class="mx-2 mb-0">/</span> <span>{{ $product->subType->type->name }}</span> <span class="mx-2 mb-0">/</span> <span>{{ $product->subType->name }}</span> <span class="mx-2 mb-0">/</span> <strong class="text-black">{{ $product->name }}</strong></div>
+            <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <span>{{ $product->subType->type->name }}</span> <span class="mx-2 mb-0">/</span> <span>{{ $product->subType->name }}</span> <span class="mx-2 mb-0">/</span> <strong class="text-black">{{ $product->name }}</strong></div>
         </div>
     </div>
 </div>
@@ -14,21 +14,31 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                @foreach($product->images as $image)
-                    <img src="/storage/{{ $image->url_original }}" alt="Image" class="img-fluid">
-                @endforeach
+                <div class="left-column">
+                    <?php $j = 1 ?>
+                    @foreach($product->images as $image)
+                    <img src="/storage/{{ $image->url_original }}" data-image="{{ $image->color}}"  @if($j == 1) class="active" @endif>
+                    <?php $j++ ?>
+                    @endforeach
+                </div>
+
             </div>
             <div class="col-md-6">
                 <h2 class="text-black">{{ $product->name }}</h2>
             <p><strong class="text-primary h4">MVR {{ $product->retail_price }}</strong></p>
                 <div class="mb-3 d-flex">
-                    <select>
+                    <div class="color-choose">
+                        <?php $i = 1 ?>
                         @foreach($product->images as $image)
                             @if ($image->color !== NULL)
-                                <option>{{ $image->color }}</option>
+                            <div>
+                                <input data-image="{{ $image->color}}" type="radio" name="color" value="" @if($i == 1) checked @endif>
+                                <label style="" for="red"><span style="background-color: #{{ $image->color}}"></span></label>
+                            </div>
                             @endif
+                        <?php $i++ ?>
                         @endforeach
-                    </select>
+                    </div>
                 </div>
                 <div class="mb-5">
                     <div class="input-group mb-3" style="max-width: 120px;">
@@ -52,85 +62,12 @@
     </div>
 </div>
 
-<div class="site-section block-3 site-blocks-2 bg-light">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-7 site-section-heading text-center pt-4">
-                <h2>Featured Products</h2>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="nonloop-block-3 owl-carousel">
-                    <div class="item">
-                        <div class="block-4 text-center">
-                            <figure class="block-4-image">
-                                <img src="images/cloth_1.jpg" alt="Image placeholder" class="img-fluid">
-                            </figure>
-                            <div class="block-4-text p-4">
-                                <h3><a href="#">Tank Top</a></h3>
-                                <p class="mb-0">Finding perfect t-shirt</p>
-                                <p class="text-primary font-weight-bold">$50</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="block-4 text-center">
-                            <figure class="block-4-image">
-                                <img src="images/shoe_1.jpg" alt="Image placeholder" class="img-fluid">
-                            </figure>
-                            <div class="block-4-text p-4">
-                                <h3><a href="#">Corater</a></h3>
-                                <p class="mb-0">Finding perfect products</p>
-                                <p class="text-primary font-weight-bold">$50</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="block-4 text-center">
-                            <figure class="block-4-image">
-                                <img src="images/cloth_2.jpg" alt="Image placeholder" class="img-fluid">
-                            </figure>
-                            <div class="block-4-text p-4">
-                                <h3><a href="#">Polo Shirt</a></h3>
-                                <p class="mb-0">Finding perfect products</p>
-                                <p class="text-primary font-weight-bold">$50</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="block-4 text-center">
-                            <figure class="block-4-image">
-                                <img src="images/cloth_3.jpg" alt="Image placeholder" class="img-fluid">
-                            </figure>
-                            <div class="block-4-text p-4">
-                                <h3><a href="#">T-Shirt Mockup</a></h3>
-                                <p class="mb-0">Finding perfect products</p>
-                                <p class="text-primary font-weight-bold">$50</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="block-4 text-center">
-                            <figure class="block-4-image">
-                                <img src="images/shoe_1.jpg" alt="Image placeholder" class="img-fluid">
-                            </figure>
-                            <div class="block-4-text p-4">
-                                <h3><a href="#">Corater</a></h3>
-                                <p class="mb-0">Finding perfect products</p>
-                                <p class="text-primary font-weight-bold">$50</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 @endsection
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.12/dist/sweetalert2.all.min.js" integrity="sha256-HyVNOA4KTbmvCLxBoFNrj0FLZtj/RCWyg4zfUjIry0k=" crossorigin="anonymous"></script>
+
     <script>
         $.ajaxSetup({
             headers: {
@@ -146,9 +83,120 @@
                     'qty': $("#qty").val()
                 },
                 success: function (result) {
-                    alert("Item added to cart");
+                    // alert("Item added to cart");
+
+                    Swal.fire({
+                        title: 'Added to Cart',
+                        text: "You have successfully added to cart",
+                        icon: 'success',
+                        confirmButtonText: 'View Cart'
+                    }).then(function() {
+                        window.location = "/cart";
+                    });
+
                 }
             });
         };
+
+        $(document).ready(function() {
+
+            $('.color-choose input').on('click', function() {
+                console.log('clicked');
+                var headphonesColor = $(this).attr('data-image');
+
+                $('.active').removeClass('active');
+                $('.left-column img[data-image = ' + headphonesColor + ']').addClass('active');
+                $(this).addClass('active');
+            });
+
+        });
+
     </script>
+
+@endsection
+
+
+@section('css')
+    <style>
+        /* Left Column */
+        .left-column img {
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        transition: all 0.3s ease;
+        }
+
+        .left-column img.active {
+        opacity: 1;
+        }
+
+        /* Product Color */
+        .product-color {
+        margin-bottom: 30px;
+        }
+
+        .color-choose div {
+        display: inline-block;
+        }
+
+        .color-choose input[type="radio"] {
+        /* display: none; */
+        }
+
+        .color-choose input[type="radio"] + label span {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        margin: -1px 4px 0 0;
+        vertical-align: middle;
+        cursor: pointer;
+        border-radius: 50%;
+        }
+
+        .color-choose input[type="radio"] + label span {
+        border: 2px solid #FFFFFF;
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,0.33);
+        }
+
+        .color-choose input[type="radio"]#red + label span {
+        background-color: #C91524;
+        }
+        .color-choose input[type="radio"]#blue + label span {
+        background-color: #314780;
+        }
+        .color-choose input[type="radio"]#black + label span {
+        background-color: #323232;
+        }
+
+        .color-choose input[type="radio"]:checked + label span {
+        background-image: url(/images/check-icn.svg);
+        background-repeat: no-repeat;
+        background-position: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 940px) {
+
+        .left-column,
+        .right-column {
+            width: 100%;
+        }
+
+        .left-column img {
+            width: 300px;
+            right: 0;
+            top: -65px;
+            left: initial;
+        }
+        }
+
+        @media (max-width: 535px) {
+        .left-column img {
+            width: 220px;
+            top: -85px;
+        }
+        }
+    </style>
 @endsection

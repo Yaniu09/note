@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="/css/aos.css">
 
     <link rel="stylesheet" href="/css/style.css">
-
+    @yield('css')
 </head>
 
 <body>
@@ -53,7 +53,6 @@
                                     <li>
                                         <a href="/cart" class="site-cart">
                                             <span class="icon icon-shopping_cart"></span>
-                                            <span class="count">2</span>
                                         </a>
                                     </li>
                                     <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span class="icon-menu"></span></a></li>
@@ -69,7 +68,7 @@
                     <ul class="site-menu js-clone-nav d-none d-md-block">
                         <li><a href="#">Home</a></li>
                         <li class="has-children active">
-                            <a href="index.html">Shop All</a>
+                            <a href="#">Shop All</a>
                             <ul class="dropdown">
                                 @foreach($types as $type)
                                 <li class="has-children">

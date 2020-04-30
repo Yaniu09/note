@@ -9,11 +9,25 @@
     </div>
 </div>
 
+@if ($items->isEmpty())
 <div class="site-section">
     <div class="container">
         <div class="row mb-5">
             <form class="col-md-12" method="post">
                 <div class="site-blocks-table">
+                    <h3>No items in cart</h3>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@else
+<div class="site-section">
+    <div class="container">
+        <div class="row mb-5">
+            <form class="col-md-12" method="post">
+                <div class="site-blocks-table">
+                    <h3>No items in cart</h3>
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -48,11 +62,12 @@
 
                                 </td>
                                 <td>{{ $item->price * $item->quantity }}</td>
-                                <td><a href="#" class="btn btn-primary btn-sm">X</a></td>
+                                <td><a href="/remove-cart-item/{{ $item->id }}" class="btn btn-primary btn-sm">X</a></td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
+
                 </div>
             </form>
         </div>
@@ -60,23 +75,8 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="row mb-5">
-                    <div class="col-md-6 mb-3 mb-md-0">
-                        <button class="btn btn-primary btn-sm btn-block">Update Cart</button>
-                    </div>
                     <div class="col-md-6">
-                        <button class="btn btn-outline-primary btn-sm btn-block">Continue Shopping</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <label class="text-black h4" for="coupon">Coupon</label>
-                        <p>Enter your coupon code if you have one.</p>
-                    </div>
-                    <div class="col-md-8 mb-3 mb-md-0">
-                        <input type="text" class="form-control py-3" id="coupon" placeholder="Coupon Code">
-                    </div>
-                    <div class="col-md-4">
-                        <button class="btn btn-primary btn-sm">Apply Coupon</button>
+                        <a href="/" class="btn btn-outline-primary btn-sm btn-block">Continue Shopping</a>
                     </div>
                 </div>
             </div>
@@ -116,4 +116,41 @@
         </div>
     </div>
 </div>
+@endif
+
 @endsection
+
+@section('js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.12/dist/sweetalert2.all.min.js" integrity="sha256-HyVNOA4KTbmvCLxBoFNrj0FLZtj/RCWyg4zfUjIry0k=" crossorigin="anonymous"></script>
+
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        function addToCart() {
+            $.ajax({
+                url: '/remove-cart-item',
+                type: 'POST',
+                data: {
+                    // 'product_id':
+                },
+                success: function (result) {
+                    // alert("Item added to cart");
+
+                    Swal.fire({
+                        title: 'Added to Cart',
+                        text: "You have successfully added to cart",
+                        icon: 'success',
+                        confirmButtonText: 'View Cart'
+                    }).then(function() {
+                        window.location = "/cart";
+                    });
+
+                }
+            });
+        };
+    </script>
+@endsection
+
